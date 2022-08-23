@@ -1,9 +1,17 @@
 import telebot
 from telebot.types import Message
 import json
+import requests
+from datetime import datetime
+from envparse import Env
 
-bot_client = telebot.TeleBot(token="5499043180:AAEmbgJJ5shiKCQ9KnvN5S-2yAfw3PhBVuU")
-ADMIN_CHAT_ID = 362857450
+
+env = Env()
+TOKEN = env.str("TOKEN")
+ADMIN_CHAT_ID = env.int("ADMIN_CHAT_ID")
+
+
+bot_client = telebot.TeleBot(token=TOKEN)
 
 
 @bot_client.message_handler(commands=["start"])
@@ -35,4 +43,9 @@ def say_standup_speech(message: Message):
     bot_client.register_next_step_handler(message, handle_standup_speech)
 
 
-bot_client.polling()
+while True:
+    try:
+        bot_client.polling()
+    except Exception as err:
+        requests.post(f"https://api.telegram.org/bot5499043180:AAEmbgJJ5shiKCQ9KnvN5S-2yAfw3PhBVuU"
+                      f"/sendMessage?chat_id=362857450&text={datetime.now()} ::: {err.__class__} ::: {err}")
