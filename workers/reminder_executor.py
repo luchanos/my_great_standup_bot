@@ -20,7 +20,6 @@ telegram_client = TelegramClient(token=TOKEN,
                                  base_url="https://api.telegram.org")
 reminder = Reminder(database_client=database_client, telegram_client=telegram_client)
 reminder.setup()
-reminder()
 
 start_time = datetime.datetime.strptime(FROM_TIME, '%H:%M').time()
 end_time = datetime.datetime.strptime(TO_TIME, '%H:%M').time()
