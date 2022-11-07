@@ -44,12 +44,3 @@ class Reminder:
             logger.error("Resources in worker has not been set up!")
             return
         self.execute()
-
-
-if __name__ == "__main__":
-    database_client = SQLiteClient("/Users/nnsviridov/PycharmProjects/ProdProjects/my_great_standup_bot/users.db")
-    telegram_client = TelegramClient(token=TOKEN,
-                                     base_url="https://api.telegram.org")
-    reminder = Reminder(database_client=database_client, telegram_client=telegram_client)
-    reminder.setup()
-    reminder()
