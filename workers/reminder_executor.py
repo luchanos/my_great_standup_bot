@@ -14,6 +14,8 @@ env = Env()
 TOKEN = env.str("TOKEN")
 FROM_TIME = env.str("FROM_TIME")
 TO_TIME = env.str("TO_TIME")
+REMINDER_PERIOD = env.int("REMINDER_PERIOD", default=10)
+SLEEP_CHECK_PERIOD = env.int("REMINDER_PERIOD", default=3600)
 
 database_client = SQLiteClient("/Users/nnsviridov/PycharmProjects/ProdProjects/my_great_standup_bot/users.db")
 telegram_client = TelegramClient(token=TOKEN,
@@ -27,6 +29,6 @@ while True:
     now_time = datetime.datetime.now().time()
     if start_time <= now_time <= end_time:
         reminder()
-        time.sleep(3600)
+        time.sleep(REMINDER_PERIOD)
     else:
-        time.sleep(3600_0)
+        time.sleep(SLEEP_CHECK_PERIOD)
