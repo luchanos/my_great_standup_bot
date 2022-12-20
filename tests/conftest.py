@@ -4,24 +4,14 @@ import pytest
 TEST_DB_URL = "/Users/nnsviridov/PycharmProjects/ProdProjects/my_great_standup_bot/users.db"
 
 
-@pytest.fixture(scope="session")  # будет вызвана 1 раз за всё время прогона тестовой сессии
-def db_connection():
-    """Фикстура для создания соединения с базой"""
-    return sqlite3.connect(TEST_DB_URL)
-
-
 @pytest.fixture(scope="session", autouse=True)
 def create_moderate_tables(db_connection):
     """Фикстура для создания и удаления таблиц"""
     create_user_table_query = """
-CREATE TABLE "user" (
-id serial NOT NULL,
-"name" varchar NOT NULL,
-surname varchar NOT NULL,
-email varchar NOT NULL,
-hashed_password varchar NOT NULL,
-is_active bool NULL,
-CONSTRAINT user_pkey PRIMARY KEY (id)
+CREATE TABLE IF NOT EXISTS users (
+user_id serial NOT NULL,
+username varchar NOT NULL,
+chat_id integer NOT NULL
 );
 """
 
@@ -35,10 +25,16 @@ DROP TABLE users;
     db_connection.commit()
 
 
+@pytest.fixture(scope="session")  # будет вызвана 1 раз за всё время прогона тестовой сессии
+def db_connection():
+    """Фикстура для создания соединения с базой"""
+    return sqlite3.connect(TEST_DB_URL)
+
+
 @pytest.fixture(scope="function", autouse=True)  # будет вызываться автоматически перед началом запуска нового теста
 def clean_database(db_connection):  # передаем на вход результат работы другой фикстуры
     """Фикстура для очищения базы от данных до прогона теста"""
-    db_connection.execute("DELETE FROM users;")
+    db_connection.execute("""DELETE FROM users;""")
     db_connection.commit()
 
 
