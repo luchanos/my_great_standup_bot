@@ -3,7 +3,7 @@ from tests.conftest import TEST_DB_URL
 
 
 def test_write_to_db_by_command(create_read_users_from_database_function):
-    COMMAND = """
+    command = """
     INSERT INTO users (user_id, username, chat_id) VALUES (?, ?, ?);
     """
     user_id = 1
@@ -11,7 +11,7 @@ def test_write_to_db_by_command(create_read_users_from_database_function):
     chat_id = 123123
     client = SQLiteClient(TEST_DB_URL)
     client.create_conn()
-    client.execute_command(COMMAND, (user_id, username, chat_id))
+    client.execute_command(command, (user_id, username, chat_id))
     users = create_read_users_from_database_function()
     assert len(users) == 1
     user = users[0]
@@ -25,12 +25,12 @@ def test_read_from_db_by_client(create_test_user_in_database_function):  # пе�
     username = "luchanos"
     chat_id = 123123
     create_test_user_in_database_function(user_id, username, chat_id)
-    COMMAND = """
+    command = """
     SELECT * FROM users;
     """
     client = SQLiteClient(TEST_DB_URL)
     client.create_conn()
-    users = client.execute_select_command(COMMAND)
+    users = client.execute_select_command(command)
     assert len(users) == 1
     user = users[0]
     assert user[0] == user_id
