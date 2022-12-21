@@ -1,7 +1,7 @@
 import sqlite3
 import pytest
 
-TEST_DB_URL = "/Users/nnsviridov/PycharmProjects/ProdProjects/my_great_standup_bot/users.db"
+TEST_DB_URL = "/Users/nnsviridov/PycharmProjects/ProdProjects/my_great_standup_bot/test_users.db"
 
 
 @pytest.fixture(scope="session", autouse=True)
